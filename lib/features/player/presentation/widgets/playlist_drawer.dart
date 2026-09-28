@@ -8,6 +8,7 @@ import '../../../../core/utils/web_image_tuning.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/models/song.dart';
 import '../../../../shared/utils/responsive_snackbar.dart';
+import '../../../../shared/widgets/scrolling_text.dart';
 import '../providers/player_provider.dart';
 import 'queue_auto_scroll.dart';
 
@@ -371,8 +372,8 @@ class _DrawerSongItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        song.title,
+                      ScrollingText(
+                        text: song.title,
                         style: textTheme.bodySmall?.copyWith(
                           fontWeight:
                               isCurrentSong
@@ -383,8 +384,6 @@ class _DrawerSongItem extends StatelessWidget {
                                   ? colorScheme.primary
                                   : colorScheme.onSurface,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(

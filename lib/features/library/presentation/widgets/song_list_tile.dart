@@ -9,6 +9,7 @@ import '../../../../shared/models/song.dart';
 import '../../../../shared/widgets/browse_card.dart' show BrowseCardAction;
 import '../../../../shared/widgets/cover_image.dart';
 import '../../../../shared/widgets/favorite_button.dart';
+import '../../../../shared/widgets/scrolling_text.dart';
 import '../../../../shared/widgets/song_tile.dart';
 
 /// 桌面端「操作按钮」列宽度。tile 内的按钮区与列表表头占位需保持一致，
@@ -176,10 +177,8 @@ class SongListTile extends StatelessWidget {
             // 标题
             Expanded(
               flex: 3,
-              child: Text(
-                song.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              child: ScrollingText(
+                text: song.title,
                 style:
                     isCurrentSong
                         ? TextStyle(

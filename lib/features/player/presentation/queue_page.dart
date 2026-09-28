@@ -9,6 +9,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../shared/models/song.dart';
 import '../../../shared/utils/responsive_snackbar.dart';
 import '../../../shared/widgets/draggable_scrollbar_overlay.dart';
+import '../../../shared/widgets/scrolling_text.dart';
 import '../domain/player_state.dart';
 import 'providers/player_provider.dart';
 import 'widgets/queue_auto_scroll.dart';
@@ -435,8 +436,8 @@ class _QueueSongItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        song.title,
+                      ScrollingText(
+                        text: song.title,
                         style: textTheme.bodyMedium?.copyWith(
                           fontWeight:
                               isCurrentSong
@@ -447,8 +448,6 @@ class _QueueSongItem extends StatelessWidget {
                                   ? colorScheme.primary
                                   : colorScheme.onSurface,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(

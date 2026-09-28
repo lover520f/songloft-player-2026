@@ -7,6 +7,7 @@ import '../models/song.dart';
 import 'browse_card.dart' show BrowseCardAction;
 import 'cover_image.dart';
 import 'favorite_button.dart';
+import 'scrolling_text.dart';
 
 /// 通用歌曲行（ListTile 形态）：封面 + 标题 + 艺术家 + 可配置 leading / trailing。
 ///
@@ -82,10 +83,8 @@ class SongTile extends StatelessWidget {
               ? RoundedRectangleBorder(borderRadius: AppRadius.mdAll)
               : null,
       leading: _buildLeading(context),
-      title: Text(
-        song.title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      title: ScrollingText(
+        text: song.title,
         style:
             isCurrentSong
                 ? TextStyle(

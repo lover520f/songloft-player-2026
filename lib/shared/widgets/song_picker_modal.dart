@@ -7,6 +7,7 @@ import '../../features/library/presentation/providers/songs_provider.dart';
 import '../../l10n/app_localizations.dart';
 import 'cover_image.dart';
 import 'directory_picker_sheet.dart';
+import 'scrolling_text.dart';
 
 /// 歌曲选择器弹窗组件
 /// 用于在歌单详情页中选择要添加的歌曲
@@ -606,13 +607,11 @@ class _SongPickerModalState extends ConsumerState<SongPickerModal> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        song.title,
+                                      ScrollingText(
+                                        text: song.title,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       if (song.artist != null)
                                         Text(

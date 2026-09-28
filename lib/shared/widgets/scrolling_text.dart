@@ -133,26 +133,33 @@ class _ScrollingTextState extends State<ScrollingText>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth != _lastMaxWidth) {
-          _lastMaxWidth = constraints.maxWidth;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) _restart();
-          });
-        }
-        return SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          child: Text(
-            widget.text,
-            style: widget.style,
-            maxLines: 1,
-            softWrap: false,
-          ),
-        );
-      },
+    // 滚动容器会切断语义合并链，导致列表行丢失歌名 aria-label；
+    // 这里显式以完整文本提供语义标签，并屏蔽内部滚动节点
+    return Semantics(
+      label: widget.text,
+      child: ExcludeSemantics(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth != _lastMaxWidth) {
+              _lastMaxWidth = constraints.maxWidth;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) _restart();
+              });
+            }
+            return SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              child: Text(
+                widget.text,
+                style: widget.style,
+                maxLines: 1,
+                softWrap: false,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
