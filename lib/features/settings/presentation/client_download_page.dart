@@ -122,7 +122,12 @@ class ClientDownloadPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsClientDownloadTitle)),
       body: ListView(
-        padding: EdgeInsets.fromLTRB(AppSpacing.md, AppSpacing.md, AppSpacing.md, context.navScrollInset),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
+          context.navScrollInset,
+        ),
         children: [
           Text(
             l10n.settingsClientDownloadIntro,

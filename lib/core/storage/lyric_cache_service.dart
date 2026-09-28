@@ -120,7 +120,11 @@ class LyricCacheService {
   ///
   /// 传入 [songUpdatedAt] 后，写入时以 JSON 信封包裹 `{songUpdatedAt, payload}`，
   /// 供后续 [get] 判断是否失效。
-  Future<void> put(String url, String lyricText, {String? songUpdatedAt}) async {
+  Future<void> put(
+    String url,
+    String lyricText, {
+    String? songUpdatedAt,
+  }) async {
     final stored =
         songUpdatedAt == null
             ? lyricText

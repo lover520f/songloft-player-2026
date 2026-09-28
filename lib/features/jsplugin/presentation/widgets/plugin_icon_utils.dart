@@ -25,7 +25,8 @@ bool isSvgIconUrl(String? icon) {
       target = rawTarget;
     }
     final targetQmark = target.indexOf('?');
-    final targetPath = targetQmark < 0 ? target : target.substring(0, targetQmark);
+    final targetPath =
+        targetQmark < 0 ? target : target.substring(0, targetQmark);
     return targetPath.toLowerCase().endsWith('.svg');
   }
   return false;

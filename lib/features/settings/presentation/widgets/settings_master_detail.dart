@@ -47,7 +47,9 @@ class SettingsMasterDetail extends StatelessWidget {
 
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(
-        AppSpacing.md, AppSpacing.sm, AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
         context.navScrollInset,
       ),
       itemCount: categories.length + (header != null ? 1 : 0),

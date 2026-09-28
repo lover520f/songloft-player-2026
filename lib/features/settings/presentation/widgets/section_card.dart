@@ -41,12 +41,18 @@ class SectionCard extends StatelessWidget {
         // Card container — light glass
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).extension<SongloftThemeExtension>()?.glassFillStrong
-                ?? colorScheme.surfaceContainer,
+            color:
+                Theme.of(
+                  context,
+                ).extension<SongloftThemeExtension>()?.glassFillStrong ??
+                colorScheme.surfaceContainer,
             borderRadius: AppRadius.lgAll,
             border: Border.all(
-              color: Theme.of(context).extension<SongloftThemeExtension>()?.glassBorder
-                  ?? colorScheme.outlineVariant,
+              color:
+                  Theme.of(
+                    context,
+                  ).extension<SongloftThemeExtension>()?.glassBorder ??
+                  colorScheme.outlineVariant,
               width: 0.5,
             ),
           ),

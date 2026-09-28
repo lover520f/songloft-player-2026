@@ -35,80 +35,80 @@ class _DlnaDeviceSheetState extends ConsumerState<DlnaDeviceSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                const Icon(Icons.cast),
-                const SizedBox(width: 12),
-                Text(
-                  l10n.dlnaCast,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const Spacer(),
-                if (dlnaState.isCasting)
-                  TextButton(
-                    onPressed: () {
-                      ref.read(dlnaStateProvider.notifier).disconnect();
-                      Navigator.pop(context);
-                    },
-                    child: Text(l10n.dlnaDisconnect),
-                  ),
-              ],
-            ),
-          ),
-          if (dlnaState.error != null)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                dlnaState.error!,
-                style: TextStyle(color: colorScheme.error),
-              ),
-            ),
-          if (dlnaState.isCasting && dlnaState.activeDevice != null)
-            ListTile(
-              leading: Icon(Icons.cast_connected, color: colorScheme.primary),
-              title: Text(dlnaState.activeDevice!.name),
-              subtitle: Text(l10n.dlnaConnected),
-              trailing: IconButton(
-                icon: Icon(
-                  dlnaState.isPlaying ? Icons.pause : Icons.play_arrow,
-                ),
-                onPressed: () {
-                  ref.read(dlnaStateProvider.notifier).togglePlay();
-                },
-              ),
-            ),
-          if (!dlnaState.isCasting) ...[
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.sizeOf(context).height * 0.4,
-              ),
-              child:
-                  dlnaState.devices.isEmpty
-                      ? _buildEmptyState(dlnaState.isDiscovering)
-                      : _buildDeviceList(dlnaState.devices),
-            ),
-          ],
-          if (dlnaState.isDiscovering)
-            Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                  const Icon(Icons.cast),
+                  const SizedBox(width: 12),
+                  Text(
+                    l10n.dlnaCast,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(width: 8),
-                  Text(l10n.dlnaSearching),
+                  const Spacer(),
+                  if (dlnaState.isCasting)
+                    TextButton(
+                      onPressed: () {
+                        ref.read(dlnaStateProvider.notifier).disconnect();
+                        Navigator.pop(context);
+                      },
+                      child: Text(l10n.dlnaDisconnect),
+                    ),
                 ],
               ),
             ),
-          const SizedBox(height: 8),
-        ],
-      ),
+            if (dlnaState.error != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  dlnaState.error!,
+                  style: TextStyle(color: colorScheme.error),
+                ),
+              ),
+            if (dlnaState.isCasting && dlnaState.activeDevice != null)
+              ListTile(
+                leading: Icon(Icons.cast_connected, color: colorScheme.primary),
+                title: Text(dlnaState.activeDevice!.name),
+                subtitle: Text(l10n.dlnaConnected),
+                trailing: IconButton(
+                  icon: Icon(
+                    dlnaState.isPlaying ? Icons.pause : Icons.play_arrow,
+                  ),
+                  onPressed: () {
+                    ref.read(dlnaStateProvider.notifier).togglePlay();
+                  },
+                ),
+              ),
+            if (!dlnaState.isCasting) ...[
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.4,
+                ),
+                child:
+                    dlnaState.devices.isEmpty
+                        ? _buildEmptyState(dlnaState.isDiscovering)
+                        : _buildDeviceList(dlnaState.devices),
+              ),
+            ],
+            if (dlnaState.isDiscovering)
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(l10n.dlnaSearching),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

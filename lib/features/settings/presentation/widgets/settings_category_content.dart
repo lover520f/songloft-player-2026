@@ -123,8 +123,8 @@ class SettingsServerInfoCard extends ConsumerWidget {
           versionInfo.version == 'dev'
               ? l10n.settingsDevVersion
               : versionInfo.version.startsWith('v')
-                  ? versionInfo.version
-                  : 'v${versionInfo.version}';
+              ? versionInfo.version
+              : 'v${versionInfo.version}';
       final details = <String>[];
       if (versionInfo.gitCommit != null) {
         details.add(versionInfo.gitCommit!);
@@ -241,7 +241,9 @@ class _SettingsCategoryContentState
 
     return ListView(
       padding: EdgeInsets.fromLTRB(
-        AppSpacing.md, AppSpacing.md, AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
         context.navScrollInset,
       ),
       children: _interleave(items, const SizedBox(height: AppSpacing.lg)),
@@ -394,10 +396,11 @@ class _SettingsCategoryContentState
             _PluginTabReorderList(
               pluginTabs: effectiveTabs,
               plugins: plugins,
-              onReorder: (newTabs) => _updateTabConfig(
-                config.copyWith(pluginTabs: newTabs),
-                false,
-              ),
+              onReorder:
+                  (newTabs) => _updateTabConfig(
+                    config.copyWith(pluginTabs: newTabs),
+                    false,
+                  ),
             ),
           ],
         ),
@@ -884,18 +887,6 @@ class _SettingsCategoryContentState
               onTap: () => context.push(AppRoutes.clientDownload),
             ),
           ],
-          const Divider(height: 1),
-          // 开源许可（songloft-org/songloft#341）。客户端二进制链接 GPL-3.0-only
-          // 的 WebF，整体按 GPL-3.0 分发，GPLv3 §4/§5 要求随附许可全文与源码获取
-          // 方式，这个入口是 App 内的履行点。刻意与「关于」并列而不是塞进关于对话框
-          // ——许可全文与依赖清单都是整页内容，对话框放不下。
-          ListTile(
-            leading: const Icon(Icons.gavel_outlined),
-            title: Text(l10n.settingsLicensesTitle),
-            subtitle: Text(l10n.settingsLicensesSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => context.push(AppRoutes.licenses),
-          ),
           const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.info_outline),
@@ -1928,7 +1919,9 @@ class _SettingsCategoryContentState
     final versionBase =
         version == 'dev'
             ? l10n.settingsDevVersion
-            : version.startsWith('v') ? version : 'v$version';
+            : version.startsWith('v')
+            ? version
+            : 'v$version';
     final versionLabel =
         buildTime != null ? '$versionBase ($buildTime)' : versionBase;
     showAboutDialog(
@@ -2044,17 +2037,19 @@ class _PluginTabReorderList extends StatelessWidget {
       proxyDecorator: (child, index, animation) {
         return AnimatedBuilder(
           animation: animation,
-          builder: (context, child) => Material(
-            elevation: 4,
-            borderRadius: BorderRadius.circular(12),
-            child: child,
-          ),
+          builder:
+              (context, child) => Material(
+                elevation: 4,
+                borderRadius: BorderRadius.circular(12),
+                child: child,
+              ),
           child: child,
         );
       },
       itemBuilder: (context, index) {
         final pt = pluginTabs[index];
-        final plugin = plugins.where((p) => p.entryPath == pt.entryPath).firstOrNull;
+        final plugin =
+            plugins.where((p) => p.entryPath == pt.entryPath).firstOrNull;
 
         return ListTile(
           key: ValueKey(pt.entryPath),

@@ -2821,33 +2821,6 @@
   "playlistLocateNotFound": "La canción actual no está en esta lista",
   "playlistSortShuffle": "Aleatorio",
   "playlistShuffled": "Canciones en orden aleatorio",
-  "settingsLicensesTitle": "Licencias de código abierto",
-  "settingsLicensesSubtitle": "Licencia de distribución y componentes de terceros",
-  "licensesDistributionSection": "Licencia de distribución",
-  "licensesDistributionHeadline": "Los binarios de este cliente se distribuyen bajo la Licencia Pública General de GNU, versión 3 (GPL-3.0).",
-  "licensesDistributionWhy": "Por qué: el cliente enlaza con el motor de renderizado WebF, que es GPL-3.0 puro sin excepción de enlace. Por lo tanto, cada instalador que distribuimos se rige en su totalidad por GPL-3.0.",
-  "licensesDistributionSource": "El código fuente en sí sigue bajo la Licencia Apache 2.0. Compilarlo tú mismo con la dependencia WebF eliminada produce un binario sin código GPL, al que solo se aplica Apache-2.0.",
-  "licensesDistributionWeb": "La compilación web no se ve afectada: WebF no admite Flutter Web y no se enlaza allí, por lo que el bundle web sigue rigiéndose solo por Apache-2.0.",
-  "licensesSourceSection": "Código fuente correspondiente completo",
-  "licensesSourceHint": "Tienes derecho al código fuente correspondiente completo de este software. Cada versión incluye un recurso CORRESPONDING-SOURCE.txt que indica los repositorios, la etiqueta y los SHAs exactos de commit usados en esa compilación.",
-  "licensesSourceClient": "Código fuente del cliente",
-  "licensesSourceServer": "Código fuente del servidor",
-  "licensesSourceWebf": "Código fuente de WebF",
-  "licensesTextsSection": "Textos de licencia",
-  "licensesGplTitle": "Texto completo de GNU GPL v3.0",
-  "licensesGplSubtitle": "Incluido dentro del instalador, legible sin conexión",
-  "licensesNoticeTitle": "Avisos de terceros (NOTICE)",
-  "licensesNoticeSubtitle": "Licencias y orígenes de WebF, libmpv, FFmpeg, fuentes y más",
-  "licensesFlutterTitle": "Todas las licencias de paquetes",
-  "licensesFlutterSubtitle": "Textos de licencia por paquete recopilados por Flutter",
-  "licensesLoadFailed": "No se pudo cargar el texto de la licencia: {error}",
-  "@licensesLoadFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "manageTags": "Administrar etiquetas",
   "createTagHint": "Introduce el nombre de la etiqueta nueva...",
   "noTags": "Aún no hay etiquetas",
@@ -2861,16 +2834,6 @@
   "@deleteTagConfirm": {
     "placeholders": {
       "name": {
-        "type": "String"
-      }
-    }
-  },
-  "licensesCopyAll": "Copiar texto completo",
-  "licensesCopied": "Copiado al portapapeles",
-  "licensesOpenFailed": "No se pudo abrir el enlace: {url}",
-  "@licensesOpenFailed": {
-    "placeholders": {
-      "url": {
         "type": "String"
       }
     }

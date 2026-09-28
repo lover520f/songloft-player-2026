@@ -7,19 +7,17 @@ import 'package:songloft_flutter/features/jsplugin/data/jsplugin_api.dart';
 /// 老服务端不返回 `render_engine`，故解析必须容错到默认 WebView 而不是抛异常。
 void main() {
   group('PluginRenderEngine.fromManifestValue', () {
-    test('webf 声明生效', () {
-      expect(
-        PluginRenderEngine.fromManifestValue('webf'),
-        PluginRenderEngine.webF,
-      );
-      expect(
-        PluginRenderEngine.fromManifestValue(' WebF '),
-        PluginRenderEngine.webF,
-      );
-    });
-
-    test('缺失 / 空串 / 非法值一律回落 WebView', () {
-      for (final value in [null, '', '  ', 'webview', 'WEBVIEW', 'chrome']) {
+    test('一切值（含已废弃的 webf）一律渲染为 WebView', () {
+      for (final value in [
+        null,
+        '',
+        '  ',
+        'webview',
+        'WEBVIEW',
+        'webf',
+        'WebF',
+        'lynx',
+      ]) {
         expect(
           PluginRenderEngine.fromManifestValue(value),
           PluginRenderEngine.webView,

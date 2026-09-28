@@ -33,9 +33,10 @@ class GlassSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ext = Theme.of(context).extension<SongloftThemeExtension>();
-    final fill = strong
-        ? (ext?.glassFillStrong ?? _fallbackFillStrong)
-        : (ext?.glassFill ?? _fallbackFill);
+    final fill =
+        strong
+            ? (ext?.glassFillStrong ?? _fallbackFillStrong)
+            : (ext?.glassFill ?? _fallbackFill);
     final border = ext?.glassBorder ?? _fallbackBorder;
     final highlight = ext?.glassHighlight ?? _fallbackHighlight;
 
@@ -47,10 +48,9 @@ class GlassSurface extends StatelessWidget {
           decoration: BoxDecoration(
             color: fill,
             borderRadius: borderRadius,
-            border: showBorder
-                ? Border.all(color: border, width: 0.5)
-                : null,
-            boxShadow: boxShadow ??
+            border: showBorder ? Border.all(color: border, width: 0.5) : null,
+            boxShadow:
+                boxShadow ??
                 [
                   BoxShadow(
                     color: Colors.black.withAlpha(20),
@@ -69,10 +69,7 @@ class GlassSurface extends StatelessWidget {
                 colors: [highlight, Colors.transparent],
               ),
             ),
-            child: Padding(
-              padding: padding ?? EdgeInsets.zero,
-              child: child,
-            ),
+            child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
           ),
         ),
       ),

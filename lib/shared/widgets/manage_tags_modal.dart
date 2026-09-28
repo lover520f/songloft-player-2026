@@ -48,9 +48,10 @@ class _ManageTagsModalState extends ConsumerState<ManageTagsModal> {
     try {
       final api = ref.read(songTagsApiProvider);
       final resp = await api.list(limit: 200);
-      final songTags = widget.songIds.length == 1
-          ? await api.getSongTags(widget.songIds.first)
-          : <SongTag>[];
+      final songTags =
+          widget.songIds.length == 1
+              ? await api.getSongTags(widget.songIds.first)
+              : <SongTag>[];
 
       if (!mounted) return;
       setState(() {
@@ -91,10 +92,7 @@ class _ManageTagsModalState extends ConsumerState<ManageTagsModal> {
     try {
       final api = ref.read(songTagsApiProvider);
       if (widget.songIds.length == 1) {
-        await api.setSongTags(
-          widget.songIds.first,
-          _selectedTagIds.toList(),
-        );
+        await api.setSongTags(widget.songIds.first, _selectedTagIds.toList());
       } else {
         for (final tagId in _selectedTagIds) {
           await api.batchBind(tagId, widget.songIds);
@@ -135,10 +133,7 @@ class _ManageTagsModalState extends ConsumerState<ManageTagsModal> {
               padding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
               child: Row(
                 children: [
-                  Text(
-                    l10n.manageTags,
-                    style: theme.textTheme.titleMedium,
-                  ),
+                  Text(l10n.manageTags, style: theme.textTheme.titleMedium),
                   const Spacer(),
                   if (_isSaving)
                     const Padding(
@@ -186,48 +181,50 @@ class _ManageTagsModalState extends ConsumerState<ManageTagsModal> {
             const Divider(height: 1),
             // 标签列表
             Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _allTags.isEmpty
+              child:
+                  _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _allTags.isEmpty
                       ? Center(
-                          child: Text(
-                            l10n.noTags,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
+                        child: Text(
+                          l10n.noTags,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
-                        )
+                        ),
+                      )
                       : ListView.builder(
-                          controller: scrollController,
-                          itemCount: _allTags.length,
-                          itemBuilder: (context, index) {
-                            final tag = _allTags[index];
-                            final selected = _selectedTagIds.contains(tag.id);
-                            return CheckboxListTile(
-                              value: selected,
-                              onChanged: (val) {
-                                setState(() {
-                                  if (val == true) {
-                                    _selectedTagIds.add(tag.id);
-                                  } else {
-                                    _selectedTagIds.remove(tag.id);
-                                  }
-                                });
-                              },
-                              title: Text(tag.name),
-                              subtitle: Text(
-                                '${tag.songCount} ${l10n.songCountUnit}',
-                                style: theme.textTheme.bodySmall,
-                              ),
-                              secondary: tag.color.isNotEmpty
-                                  ? CircleAvatar(
+                        controller: scrollController,
+                        itemCount: _allTags.length,
+                        itemBuilder: (context, index) {
+                          final tag = _allTags[index];
+                          final selected = _selectedTagIds.contains(tag.id);
+                          return CheckboxListTile(
+                            value: selected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  _selectedTagIds.add(tag.id);
+                                } else {
+                                  _selectedTagIds.remove(tag.id);
+                                }
+                              });
+                            },
+                            title: Text(tag.name),
+                            subtitle: Text(
+                              '${tag.songCount} ${l10n.songCountUnit}',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                            secondary:
+                                tag.color.isNotEmpty
+                                    ? CircleAvatar(
                                       radius: 12,
                                       backgroundColor: _parseColor(tag.color),
                                     )
-                                  : const Icon(Icons.label_outline),
-                            );
-                          },
-                        ),
+                                    : const Icon(Icons.label_outline),
+                          );
+                        },
+                      ),
             ),
           ],
         );

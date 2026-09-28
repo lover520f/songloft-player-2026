@@ -35,6 +35,4 @@ macos/Flutter/ephemeral/
 ios/.symlinks/
 ios/Pods/
 
-# WebF Android 验证环境本地产物
 node_modules/
-scripts/webf-android-verify/out/

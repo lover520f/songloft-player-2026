@@ -86,15 +86,12 @@ class SongloftThemeExtension extends ThemeExtension<SongloftThemeExtension> {
       glassFillStrong:
           Color.lerp(glassFillStrong, other.glassFillStrong, t) ??
           glassFillStrong,
-      glassBorder:
-          Color.lerp(glassBorder, other.glassBorder, t) ?? glassBorder,
+      glassBorder: Color.lerp(glassBorder, other.glassBorder, t) ?? glassBorder,
       glassHighlight:
-          Color.lerp(glassHighlight, other.glassHighlight, t) ??
-          glassHighlight,
+          Color.lerp(glassHighlight, other.glassHighlight, t) ?? glassHighlight,
       glassGlow: Color.lerp(glassGlow, other.glassGlow, t) ?? glassGlow,
       glassGlowFaint:
-          Color.lerp(glassGlowFaint, other.glassGlowFaint, t) ??
-          glassGlowFaint,
+          Color.lerp(glassGlowFaint, other.glassGlowFaint, t) ?? glassGlowFaint,
       glassSheen: Color.lerp(glassSheen, other.glassSheen, t) ?? glassSheen,
       navigationStyle: t < 0.5 ? navigationStyle : other.navigationStyle,
     );
@@ -169,22 +166,29 @@ class AppTheme {
     final controlBorderRadius = BorderRadius.circular(controlRadius);
 
     // 玻璃色：从主题包取 glassColor，无则回落星蓝基线
-    final glassBase = themeColors?.glassColor ??
+    final glassBase =
+        themeColors?.glassColor ??
         (isLight ? const Color(0xFF3BAEEF) : const Color(0xFF5BC0F5));
-    final glassFill = isLight
-        ? const Color(0xB8FFFFFF)   // white @ 0.72
-        : const Color(0xAD1C1C1E); // #1C1C1E @ 0.68
-    final glassFillStrong = isLight
-        ? const Color(0xD9FFFFFF)   // white @ 0.85
-        : const Color(0xD11C1C1E); // #1C1C1E @ 0.82
-    final glassBorder = isLight
-        ? const Color(0x73FFFFFF)   // white @ 0.45
-        : const Color(0x1FFFFFFF); // white @ 0.12
-    final glassHighlight = isLight
-        ? const Color(0x99FFFFFF)   // white @ 0.60
-        : const Color(0x26FFFFFF); // white @ 0.15
-    final glassGlowFaint = glassBase.withAlpha(isLight ? 26 : 36);  // 0.10 / 0.14
-    final glassSheen = glassBase.withAlpha(isLight ? 46 : 26);      // 0.18 / 0.10
+    final glassFill =
+        isLight
+            ? const Color(0xB8FFFFFF) // white @ 0.72
+            : const Color(0xAD1C1C1E); // #1C1C1E @ 0.68
+    final glassFillStrong =
+        isLight
+            ? const Color(0xD9FFFFFF) // white @ 0.85
+            : const Color(0xD11C1C1E); // #1C1C1E @ 0.82
+    final glassBorder =
+        isLight
+            ? const Color(0x73FFFFFF) // white @ 0.45
+            : const Color(0x1FFFFFFF); // white @ 0.12
+    final glassHighlight =
+        isLight
+            ? const Color(0x99FFFFFF) // white @ 0.60
+            : const Color(0x26FFFFFF); // white @ 0.15
+    final glassGlowFaint = glassBase.withAlpha(
+      isLight ? 26 : 36,
+    ); // 0.10 / 0.14
+    final glassSheen = glassBase.withAlpha(isLight ? 46 : 26); // 0.18 / 0.10
 
     // 主题扩展
     final extension = SongloftThemeExtension(

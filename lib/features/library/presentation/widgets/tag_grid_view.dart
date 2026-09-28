@@ -32,8 +32,7 @@ class _TagGridViewState extends ConsumerState<TagGridView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _searchController.text =
-        ref.read(songTagListProvider).value?.keyword ?? '';
+    _searchController.text = ref.read(songTagListProvider).value?.keyword ?? '';
   }
 
   @override
@@ -63,25 +62,26 @@ class _TagGridViewState extends ConsumerState<TagGridView> {
     final controller = TextEditingController(text: tag.name);
     final newName = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.renameTag),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(hintText: l10n.createTagHint),
-          onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l10n.commonCancel),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l10n.renameTag),
+            content: TextField(
+              controller: controller,
+              autofocus: true,
+              decoration: InputDecoration(hintText: l10n.createTagHint),
+              onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(l10n.commonCancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+                child: Text(l10n.commonConfirm),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            child: Text(l10n.commonConfirm),
-          ),
-        ],
-      ),
     );
     if (newName == null || newName.isEmpty || newName == tag.name) return;
     if (!mounted) return;
@@ -103,23 +103,24 @@ class _TagGridViewState extends ConsumerState<TagGridView> {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.commonDelete),
-        content: Text(l10n.deleteTagConfirm(tag.name)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l10n.commonCancel),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l10n.commonDelete),
+            content: Text(l10n.deleteTagConfirm(tag.name)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(l10n.commonCancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(ctx).colorScheme.error,
+                ),
+                child: Text(l10n.commonDelete),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(ctx).colorScheme.error,
-            ),
-            child: Text(l10n.commonDelete),
-          ),
-        ],
-      ),
     );
     if (confirmed != true || !mounted) return;
     try {

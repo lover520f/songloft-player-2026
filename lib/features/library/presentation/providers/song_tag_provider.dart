@@ -90,12 +90,14 @@ class SongTagListNotifier extends AsyncNotifier<SongTagListState> {
     try {
       final resp = await _fetch(offset: current.items.length);
       final merged = [...current.items, ...resp.tags];
-      state = AsyncValue.data(current.copyWith(
-        items: merged,
-        total: resp.total,
-        hasMore: merged.length < resp.total,
-        isLoadingMore: false,
-      ));
+      state = AsyncValue.data(
+        current.copyWith(
+          items: merged,
+          total: resp.total,
+          hasMore: merged.length < resp.total,
+          isLoadingMore: false,
+        ),
+      );
     } catch (_) {
       state = AsyncValue.data(current.copyWith(isLoadingMore: false));
     }
@@ -120,11 +122,13 @@ final songTagListProvider =
 // ---------------------------------------------------------------------------
 
 /// 获取某首歌的自定义标签
-final songTagsForSongProvider =
-    FutureProvider.family<List<SongTag>, int>((ref, songId) async {
-      final api = ref.watch(songTagsApiProvider);
-      return api.getSongTags(songId);
-    });
+final songTagsForSongProvider = FutureProvider.family<List<SongTag>, int>((
+  ref,
+  songId,
+) async {
+  final api = ref.watch(songTagsApiProvider);
+  return api.getSongTags(songId);
+});
 
 // ---------------------------------------------------------------------------
 // 标签下的歌曲列表（drill-down）
@@ -177,16 +181,20 @@ class TagSongsNotifier extends AsyncNotifier<PaginatedSongsState> {
   Future<void> loadMore() async {
     final current = state.value;
     if (current == null || !current.hasMore || current.isLoadingMore) return;
-    state = AsyncValue.data(current.copyWith(isLoadingMore: true, clearError: true));
+    state = AsyncValue.data(
+      current.copyWith(isLoadingMore: true, clearError: true),
+    );
     try {
       final resp = await _fetch(offset: current.items.length);
       final merged = [...current.items, ...resp.songs];
-      state = AsyncValue.data(current.copyWith(
-        items: merged,
-        total: resp.total,
-        hasMore: merged.length < resp.total,
-        isLoadingMore: false,
-      ));
+      state = AsyncValue.data(
+        current.copyWith(
+          items: merged,
+          total: resp.total,
+          hasMore: merged.length < resp.total,
+          isLoadingMore: false,
+        ),
+      );
     } catch (e) {
       state = AsyncValue.data(
         current.copyWith(isLoadingMore: false, loadMoreError: e),
@@ -195,8 +203,7 @@ class TagSongsNotifier extends AsyncNotifier<PaginatedSongsState> {
   }
 }
 
-final tagSongsProvider = AsyncNotifierProvider.family<
-  TagSongsNotifier,
-  PaginatedSongsState,
-  int
->(TagSongsNotifier.new);
+final tagSongsProvider =
+    AsyncNotifierProvider.family<TagSongsNotifier, PaginatedSongsState, int>(
+      TagSongsNotifier.new,
+    );

@@ -133,7 +133,9 @@ class _FrontendUpgradeDialogState extends ConsumerState<FrontendUpgradeDialog> {
                           Expanded(
                             child: Text(
                               _error!,
-                              style: TextStyle(color: colorScheme.onErrorContainer),
+                              style: TextStyle(
+                                color: colorScheme.onErrorContainer,
+                              ),
                             ),
                           ),
                         ],

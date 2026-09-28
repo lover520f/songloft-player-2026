@@ -62,7 +62,7 @@ class _PluginRenderSurfaceWebViewState
   bool _pageReady = false;
 
   /// `build()` 里读 `Theme.of(context)` 存下来，`onLoadStop` 那种拿不到 context 的
-  /// 回调里复用。与 WebF 面的同名字段一一对应。
+  /// 回调里复用。
   ColorScheme? _colorScheme;
   String? _lastPushedThemeSig;
 
@@ -75,8 +75,8 @@ class _PluginRenderSurfaceWebViewState
     _syncTheme();
   }
 
-  /// 亮暗标记 + 宿主真实色板下推，与 `PluginRenderSurfaceWebF._syncTheme` 对等
-  /// （载荷本身当去重签名）。色板必须走消息：`?theme=` 只带 light/dark 两个字，
+  /// 亮暗标记 + 宿主真实色板下推（载荷本身当去重签名）。
+  /// 色板必须走消息：`?theme=` 只带 light/dark 两个字，
   /// 而 `ColorScheme` 有三十来个角色色、还会被 ThemePack 整体换掉。
   void _syncTheme() {
     if (!_pageReady) return;
@@ -102,13 +102,12 @@ class _PluginRenderSurfaceWebViewState
   @override
   void clearFocus() => _controller?.clearFocus();
 
-  /// 与 `PluginRenderSurfaceWebF.setPageVisible` 对等：让插件页在 Tab 切回来时
-  /// 收到一次 `visibilitychange`。
+  /// 让插件页在 Tab 切回来时收到一次 `visibilitychange`。
   ///
   /// 系统 WebView 被 `Offstage` 隐藏时**不会**自己派发这个事件（它看的是 WebView
   /// 自身的窗口可见性，而 Offstage 只是不 paint），所以这里合成派发。
   ///
-  /// 与 WebF 那侧的差别：`document.visibilityState` 不由我们改（那是引擎内部状态，
+  /// 注意 `document.visibilityState` 不由我们改（那是引擎内部状态，
   /// WebView 里没有对应入口），仍然是 `'visible'`。所以插件的处理函数**不能**
   /// 依赖「事件来了就说明状态变了」，要按「收到通知就重新检查一遍自己关心的东西」
   /// 来写——miot 的封面重载就是这么处理的。

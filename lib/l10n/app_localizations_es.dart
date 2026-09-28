@@ -4634,77 +4634,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get playlistShuffled => 'Canciones en orden aleatorio';
 
   @override
-  String get settingsLicensesTitle => 'Licencias de código abierto';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'Licencia de distribución y componentes de terceros';
-
-  @override
-  String get licensesDistributionSection => 'Licencia de distribución';
-
-  @override
-  String get licensesDistributionHeadline =>
-      'Los binarios de este cliente se distribuyen bajo la Licencia Pública General de GNU, versión 3 (GPL-3.0).';
-
-  @override
-  String get licensesDistributionWhy =>
-      'Por qué: el cliente enlaza con el motor de renderizado WebF, que es GPL-3.0 puro sin excepción de enlace. Por lo tanto, cada instalador que distribuimos se rige en su totalidad por GPL-3.0.';
-
-  @override
-  String get licensesDistributionSource =>
-      'El código fuente en sí sigue bajo la Licencia Apache 2.0. Compilarlo tú mismo con la dependencia WebF eliminada produce un binario sin código GPL, al que solo se aplica Apache-2.0.';
-
-  @override
-  String get licensesDistributionWeb =>
-      'La compilación web no se ve afectada: WebF no admite Flutter Web y no se enlaza allí, por lo que el bundle web sigue rigiéndose solo por Apache-2.0.';
-
-  @override
-  String get licensesSourceSection => 'Código fuente correspondiente completo';
-
-  @override
-  String get licensesSourceHint =>
-      'Tienes derecho al código fuente correspondiente completo de este software. Cada versión incluye un recurso CORRESPONDING-SOURCE.txt que indica los repositorios, la etiqueta y los SHAs exactos de commit usados en esa compilación.';
-
-  @override
-  String get licensesSourceClient => 'Código fuente del cliente';
-
-  @override
-  String get licensesSourceServer => 'Código fuente del servidor';
-
-  @override
-  String get licensesSourceWebf => 'Código fuente de WebF';
-
-  @override
-  String get licensesTextsSection => 'Textos de licencia';
-
-  @override
-  String get licensesGplTitle => 'Texto completo de GNU GPL v3.0';
-
-  @override
-  String get licensesGplSubtitle =>
-      'Incluido dentro del instalador, legible sin conexión';
-
-  @override
-  String get licensesNoticeTitle => 'Avisos de terceros (NOTICE)';
-
-  @override
-  String get licensesNoticeSubtitle =>
-      'Licencias y orígenes de WebF, libmpv, FFmpeg, fuentes y más';
-
-  @override
-  String get licensesFlutterTitle => 'Todas las licencias de paquetes';
-
-  @override
-  String get licensesFlutterSubtitle =>
-      'Textos de licencia por paquete recopilados por Flutter';
-
-  @override
-  String licensesLoadFailed(String error) {
-    return 'No se pudo cargar el texto de la licencia: $error';
-  }
-
-  @override
   String get manageTags => 'Administrar etiquetas';
 
   @override
@@ -4734,16 +4663,5 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String deleteTagConfirm(String name) {
     return '¿Eliminar la etiqueta \"$name\"? Las canciones de esta etiqueta no se eliminarán.';
-  }
-
-  @override
-  String get licensesCopyAll => 'Copiar texto completo';
-
-  @override
-  String get licensesCopied => 'Copiado al portapapeles';
-
-  @override
-  String licensesOpenFailed(String url) {
-    return 'No se pudo abrir el enlace: $url';
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/window_visibility.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'plugin_render_controller.dart';
-import 'plugin_render_surface_webf.dart';
 import 'plugin_render_surface_webview.dart';
 
 /// 插件页渲染层的**引擎无关**外壳（songloft-org/songloft#341）。
@@ -17,8 +16,8 @@ import 'plugin_render_surface_webview.dart';
 /// 里两份逐字重复的超时 / 错误视图 / token 注入 / 重建计数逻辑。
 ///
 /// 刻意是纯 `StatefulWidget`、不读任何 provider：用哪个引擎由宿主解析后经
-/// [engine] 传入（见 `pluginRenderEngineForProvider`）。需要 provider 的是各引擎
-/// 的渲染面自己（如 WebF 面要读播放器状态），它们各自持有 `ref`。
+/// [engine] 传入（见 `pluginRenderEngineForProvider`）。需要 provider 的是渲染面
+/// 自己，它自己持有 `ref`。
 class PluginRenderView extends StatefulWidget {
   /// 已经拼好的完整插件页 URL（含 theme / access_token / embed）。
   final String url;
@@ -123,11 +122,8 @@ class _PluginRenderViewState extends State<PluginRenderView>
   /// 不可见时下一帧把渲染面移出 widget 树以销毁 WebView2 HWND（仅原生 platform
   /// view 才需要，见 [_needsHwndUnmount]）；恢复可见时换 key 重建并重新计时。
   ///
-  /// 重建动作刻意收窄到 `_needsHwndUnmount`：WebF 是普通 Flutter RenderObject，
-  /// 最小化时从未被移出树（`surfaceMounted` 恒 true），恢复时若也 `_reloadSeq++`
-  /// 会连带销毁进程内缓存的 controller，整页重载、丢失页面 JS 状态（列表滚动位置、
-  /// 筛选项等回到第一屏）—— songloft-org/songloft#438。原生 WebView2 才真的在
-  /// 最小化时销毁过 HWND，恢复时必须换 key 重建以重新创建原生表面。
+  /// 重建动作刻意收窄到 `_needsHwndUnmount`：WebView2 在最小化时销毁过 HWND，
+  /// 恢复时必须换 key 重建以重新创建原生表面。
   void _onWindowVisibilityChanged() {
     final visible = windowVisibleNotifier.value;
     if (!mounted || _hwndVisible == visible) return;
@@ -203,11 +199,7 @@ class _PluginRenderViewState extends State<PluginRenderView>
           _buildErrorView(colorScheme)
         else if (surfaceMounted)
           // SizedBox.expand 把渲染面收成 tight 约束：Stack 默认给非定位子节点
-          // loose 约束（min 0 / max=栈尺寸），WebF 在 loose 宽度下按内容收缩，
-          // 插件页里 flex:1 的布局会解析出无界宽度，触发 WebF flex 的
-          // `Infinity or NaN toInt` 崩溃（miot 设置页因含 <select>/<input> 内嵌
-          // Flutter widget 最先炸）。收成 tight 后 WebF 根拿到确定宽度即可。
-          // songloft-org/songloft#341
+          // loose 约束（min 0 / max=栈尺寸），收成 tight 后渲染面拿到确定尺寸。
           Offstage(
             offstage: !_appVisible,
             child: SizedBox.expand(child: _buildSurface()),
@@ -222,29 +214,16 @@ class _PluginRenderViewState extends State<PluginRenderView>
   }
 
   Widget _buildSurface() {
-    switch (widget.engine) {
-      case PluginRenderEngine.webView:
-        return PluginRenderSurfaceWebView(
-          key: ValueKey(_reloadSeq),
-          url: widget.url,
-          theme: widget.theme,
-          useHybridComposition: widget.useHybridComposition,
-          onLoadStart: _onLoadStart,
-          onLoadStop: _onLoadStop,
-          onError: _onError,
-          onControllerReady: widget.onControllerReady,
-        );
-      case PluginRenderEngine.webF:
-        return PluginRenderSurfaceWebF(
-          key: ValueKey(_reloadSeq),
-          url: widget.url,
-          theme: widget.theme,
-          onLoadStart: _onLoadStart,
-          onLoadStop: _onLoadStop,
-          onError: _onError,
-          onControllerReady: widget.onControllerReady,
-        );
-    }
+    return PluginRenderSurfaceWebView(
+      key: ValueKey(_reloadSeq),
+      url: widget.url,
+      theme: widget.theme,
+      useHybridComposition: widget.useHybridComposition,
+      onLoadStart: _onLoadStart,
+      onLoadStop: _onLoadStop,
+      onError: _onError,
+      onControllerReady: widget.onControllerReady,
+    );
   }
 
   Widget _buildErrorView(ColorScheme colorScheme) {

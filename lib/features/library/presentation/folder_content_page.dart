@@ -222,9 +222,7 @@ class _FolderContentPageState extends ConsumerState<FolderContentPage>
       onRefresh: () async => ref.invalidate(folderContentProvider(widget.path)),
       child: ListView(
         controller: _scrollController,
-        padding: EdgeInsets.only(
-          bottom: context.navScrollInset,
-        ),
+        padding: EdgeInsets.only(bottom: context.navScrollInset),
         children: [
           if (hasFolders)
             _buildFolderGrid(context, state, layout, horizontalPadding),

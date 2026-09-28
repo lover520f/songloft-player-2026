@@ -124,9 +124,9 @@ class _DesktopFullPlayerState extends ConsumerState<DesktopFullPlayer>
       body: Stack(
         children: [
           // 背景模糊封面 / 无封面时的动态渐变
-          // 注意：Windows 平台（WebF 渲染引擎）上 ImageFiltered.blur 会创建
-          // 过大的 saveLayer 导致 Stack 后续子层不渲染，故 Windows 上跳过
-          // 模糊封面，改用取色渐变（songloft-org/songloft#382）。
+          // 注意：Windows 平台上 ImageFiltered.blur 会创建过大的 saveLayer
+          // 导致 Stack 后续子层不渲染，故 Windows 上跳过模糊封面，改用取色渐变
+          // （songloft-org/songloft#382）。
           if (coverUrl != null &&
               (kIsWeb || defaultTargetPlatform != TargetPlatform.windows))
             Positioned.fill(

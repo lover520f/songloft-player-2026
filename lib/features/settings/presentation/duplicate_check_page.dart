@@ -298,7 +298,12 @@ class _DuplicateCheckPageState extends ConsumerState<DuplicateCheckPage> {
           _loading && _phase == _PagePhase.status
               ? const Center(child: CircularProgressIndicator())
               : ListView(
-                padding: EdgeInsets.fromLTRB(AppSpacing.md, AppSpacing.md, AppSpacing.md, context.navScrollInset),
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  context.navScrollInset,
+                ),
                 children: [
                   if (_error != null) _buildError(),
                   if (_phase == _PagePhase.status) _buildStatusPhase(),

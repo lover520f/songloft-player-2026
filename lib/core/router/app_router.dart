@@ -20,7 +20,6 @@ import '../../features/jsplugin/presentation/widgets/plugin_registry.dart';
 import '../../features/settings/presentation/duplicate_check_page.dart';
 import '../../features/settings/presentation/shortcut_settings_page.dart';
 import '../../features/settings/presentation/client_download_page.dart';
-import '../../features/settings/presentation/licenses_page.dart';
 import '../../features/settings/presentation/widgets/settings_category_content.dart';
 import '../../features/settings/presentation/providers/settings_provider.dart';
 import '../../features/player/presentation/widgets/mobile_player.dart';
@@ -52,7 +51,6 @@ class AppRoutes {
   static const String shortcuts = '/settings/shortcuts';
   static const String clientDownload = '/settings/download';
   static const String pluginRegistry = '/settings/plugin-registry';
-  static const String licenses = '/settings/licenses';
   static const String settingsCategory = '/settings/category/:index';
   static const String plugin = '/plugin';
   static const String pluginTab = '/plugin-tab/:entryPath';
@@ -123,12 +121,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.plugin,
         // ⚠️ **已注册为 Tab 的插件转到 Tab 页，不再开这条独立路由。**
-        // 两者给 PluginRenderView 传的 url 相同，而 WebF 的 controller 缓存键是
-        // 「去掉 query 的 URL」（`plugin_render_surface_webf.dart` 的
-        // `_controllerNameFor`），于是**两条入口指向同一个 WebFController**。
-        // 让同一插件只有一个入口，既避免两个渲染面同时持有一个 controller，
-        // 也避免「独立页 push/pop 一次 = Tab 页的渲染面被销毁再重建」这种
-        // 白白丢掉页面状态的抖动（songloft-org/songloft#341）。
+        // 两者给 PluginRenderView 传的 url 相同，让同一插件只有一个入口，
+        // 既避免两个渲染面渲染同一页面，也避免「独立页 push/pop 一次 =
+        // Tab 页的渲染面被销毁再重建」这种白白丢掉页面状态的抖动
+        // （songloft-org/songloft#341）。
         //
         // 注意 Tab 页**并非所有平台都保活**：Web 与移动端用 Offstage 保活，
         // 桌面端（Windows/macOS/Linux）切走即销毁（见 `shell_layout.dart`，
@@ -249,11 +245,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   int.tryParse(state.pathParameters['tagId'] ?? '') ?? 0;
               final name = state.uri.queryParameters['name'] ?? '';
               final cover = state.uri.queryParameters['cover'];
-              return TagSongsPage(
-                tagId: tagId,
-                tagName: name,
-                coverUrl: cover,
-              );
+              return TagSongsPage(tagId: tagId, tagName: name, coverUrl: cover);
             },
           ),
 
@@ -313,12 +305,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const PluginRegistryPage(),
           ),
 
-          // 开源许可（GPL-3.0 分发声明 + 内嵌许可全文，songloft-org/songloft#341）
-          GoRoute(
-            path: AppRoutes.licenses,
-            builder: (context, state) => const LicensesPage(),
-          ),
-
           // 设置分类详情（移动端二级页）。做成真实路由让浏览器/系统返回键回到
           // 设置一级列表；宽屏 master-detail 仍在 SettingsPage 内同页切换。
           GoRoute(
@@ -363,7 +349,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   // 返回键由路由页的 PopScope 统一接管（canPop:false 阻止系统弹栈，
                   // onPopInvokedWithResult 在每次返回时触发）：有浮层/编辑器/非 main
                   // 页就调插件 consumeBack 收起并吞掉这次返回；否则退回首页 tab。
-                  // 之前只挂 onExit 时，go_router 在 webf 覆盖层打开时不咨询 onExit，
+                  // 之前只挂 onExit 时，go_router 在覆盖层打开时不咨询 onExit，
                   // 导致「打开设备选择器后返回键直接吞掉、不收起」；PopScope 的
                   // onPopInvokedWithResult 是 Flutter 层回调，对每次系统返回都稳定触发。
                   onPopInvokedWithResult: (didPop, result) async {

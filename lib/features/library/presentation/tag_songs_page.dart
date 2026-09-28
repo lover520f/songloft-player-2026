@@ -99,8 +99,7 @@ class _TagSongsPageState extends ConsumerState<TagSongsPage>
   Future<void> _toggleSelectAll() async {
     await ref.read(tagSongsProvider(widget.tagId).notifier).loadAll();
     if (!mounted) return;
-    final songs =
-        ref.read(tagSongsProvider(widget.tagId)).value?.items ?? [];
+    final songs = ref.read(tagSongsProvider(widget.tagId)).value?.items ?? [];
     setState(() {
       if (_selectedIds.length >= songs.length) {
         _selectedIds.clear();
@@ -116,8 +115,7 @@ class _TagSongsPageState extends ConsumerState<TagSongsPage>
     final l10n = AppLocalizations.of(context);
     await ref.read(tagSongsProvider(widget.tagId).notifier).loadAll();
     if (!mounted) return;
-    final songs =
-        ref.read(tagSongsProvider(widget.tagId)).value?.items ?? [];
+    final songs = ref.read(tagSongsProvider(widget.tagId)).value?.items ?? [];
     if (songs.isEmpty) {
       ResponsiveSnackBar.show(context, message: l10n.libraryNoPlayableSongs);
       return;
@@ -366,9 +364,7 @@ class _TagSongsPageState extends ConsumerState<TagSongsPage>
                 ),
               ),
             ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: context.navScrollInset),
-          ),
+          SliverToBoxAdapter(child: SizedBox(height: context.navScrollInset)),
         ];
       },
       loading:

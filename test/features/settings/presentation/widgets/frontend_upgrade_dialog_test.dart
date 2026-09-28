@@ -57,9 +57,7 @@ void main() {
           locale: const Locale('zh'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          theme: ThemeData(
-            extensions: const [SongloftThemeExtension()],
-          ),
+          theme: ThemeData(extensions: const [SongloftThemeExtension()]),
           home: const Scaffold(body: FrontendUpgradeDialog()),
         ),
       ),

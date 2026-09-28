@@ -524,9 +524,7 @@ class _PlaylistDetailPageState extends ConsumerState<PlaylistDetailPage>
           ),
 
         // 底部安全区域
-        SliverToBoxAdapter(
-          child: SizedBox(height: context.navScrollInset),
-        ),
+        SliverToBoxAdapter(child: SizedBox(height: context.navScrollInset)),
       ],
     );
 
@@ -763,9 +761,7 @@ class _PlaylistDetailPageState extends ConsumerState<PlaylistDetailPage>
                   child: _buildSongsLoadMoreIndicator(songsAsync.value!),
                 ),
               SliverToBoxAdapter(
-                child: SizedBox(
-                  height: context.navScrollInset,
-                ),
+                child: SizedBox(height: context.navScrollInset),
               ),
             ],
           ),

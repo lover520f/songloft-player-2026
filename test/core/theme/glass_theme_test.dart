@@ -15,9 +15,7 @@ void main() {
     });
 
     test('returns null when glassColor absent', () {
-      final colors = ThemePackColors.fromJson({
-        'seedColor': '#2196F3',
-      });
+      final colors = ThemePackColors.fromJson({'seedColor': '#2196F3'});
       expect(colors.glassColor, isNull);
     });
 
@@ -54,12 +52,8 @@ void main() {
     });
 
     test('lerp interpolates glass colors', () {
-      const a = SongloftThemeExtension(
-        glassGlow: Color(0xFF000000),
-      );
-      const b = SongloftThemeExtension(
-        glassGlow: Color(0xFFFFFFFF),
-      );
+      const a = SongloftThemeExtension(glassGlow: Color(0xFF000000));
+      const b = SongloftThemeExtension(glassGlow: Color(0xFFFFFFFF));
 
       final mid = a.lerp(b, 0.5);
       expect((mid.glassGlow.r * 255).round(), closeTo(128, 1));
@@ -68,24 +62,16 @@ void main() {
     });
 
     test('lerp at 0 returns first value', () {
-      const a = SongloftThemeExtension(
-        glassGlow: Color(0xFF3BAEEF),
-      );
-      const b = SongloftThemeExtension(
-        glassGlow: Color(0xFFFF0000),
-      );
+      const a = SongloftThemeExtension(glassGlow: Color(0xFF3BAEEF));
+      const b = SongloftThemeExtension(glassGlow: Color(0xFFFF0000));
 
       final result = a.lerp(b, 0.0);
       expect(result.glassGlow, const Color(0xFF3BAEEF));
     });
 
     test('lerp at 1 returns second value', () {
-      const a = SongloftThemeExtension(
-        glassGlow: Color(0xFF3BAEEF),
-      );
-      const b = SongloftThemeExtension(
-        glassGlow: Color(0xFFFF0000),
-      );
+      const a = SongloftThemeExtension(glassGlow: Color(0xFF3BAEEF));
+      const b = SongloftThemeExtension(glassGlow: Color(0xFFFF0000));
 
       final result = a.lerp(b, 1.0);
       expect(result.glassGlow, const Color(0xFFFF0000));
@@ -115,14 +101,8 @@ void main() {
         'created_at': '',
         'updated_at': '',
         'data': {
-          'light': {
-            'seedColor': '#2196F3',
-            'glassColor': '#FF5722',
-          },
-          'dark': {
-            'seedColor': '#4FC3F7',
-            'glassColor': '#FF8A65',
-          },
+          'light': {'seedColor': '#2196F3', 'glassColor': '#FF5722'},
+          'dark': {'seedColor': '#4FC3F7', 'glassColor': '#FF8A65'},
         },
       });
 

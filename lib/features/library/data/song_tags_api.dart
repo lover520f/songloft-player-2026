@@ -105,8 +105,6 @@ class SongTagsApi {
     );
     return response.data!['unbound'] as int;
   }
-
-
 }
 
 /// 标签模型
@@ -149,12 +147,11 @@ class SongTagListResponse {
   factory SongTagListResponse.fromJson(Map<String, dynamic> json) {
     final tagsJson = json['tags'] as List<dynamic>? ?? [];
     return SongTagListResponse(
-      tags: tagsJson
-          .map((e) => SongTag.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      tags:
+          tagsJson
+              .map((e) => SongTag.fromJson(e as Map<String, dynamic>))
+              .toList(),
       total: (json['total'] as int?) ?? 0,
     );
   }
 }
-
-

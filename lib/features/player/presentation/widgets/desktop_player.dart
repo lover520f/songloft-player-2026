@@ -37,12 +37,16 @@ class DesktopPlayer extends ConsumerWidget {
     final bar = Container(
       height: 90,
       decoration: BoxDecoration(
-        color: useCapsule
-            ? Colors.transparent
-            : theme.colorScheme.surface,
-        border: useCapsule
-            ? null
-            : Border(top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1)),
+        color: useCapsule ? Colors.transparent : theme.colorScheme.surface,
+        border:
+            useCapsule
+                ? null
+                : Border(
+                  top: BorderSide(
+                    color: theme.colorScheme.outlineVariant,
+                    width: 1,
+                  ),
+                ),
       ),
       child: Column(
         children: [

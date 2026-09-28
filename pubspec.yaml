@@ -60,33 +60,6 @@ dependencies:
   flutter_markdown: ^0.7.6
   # WebView（用于应用内加载插件页面）
   flutter_inappwebview: ^6.1.5
-  # WebF：native 平台插件页的备选渲染引擎（songloft-org/songloft#341）。
-  # ⚠️ GPL-3.0-only，且 LICENSE 里的 OpenWebF Enterprise Exception 仅对付费
-  # 订阅者生效、无 LGPL 式链接例外 —— 引入后本客户端**分发的二进制整体**按
-  # GPL-3.0 授权（源码仍 Apache-2.0）。详见 NOTICE。
-  # 不支持 Flutter Web（lib/ 内 39 处无条件 import 'dart:ffi'），故 Web 端
-  # 永久保留 iframe 路径。
-  webf: ^0.24.27
-  # webf-ui 的 Cupertino 原生元素（31 个 `<flutter-cupertino-*>`），供声明
-  # `renderEngine: "webf"` 的插件页使用（songloft-org/songloft#341）。
-  # 许可：**Apache-2.0**（以包内 LICENSE 为准；npm 侧同名包的元数据写 ISC 是错的），
-  # 不引入新的 copyleft —— 本客户端整体按 GPL-3.0 分发的原因只有上面的 webf。
-  # 它 depend on `webf ^0.24.0`，与这里锁定的 0.24.27 兼容。
-  # ⚠️ `<webf-list-view>` **不在这个包里**，是 webf 包内建的（`src/html/listview.dart`），
-  # 所以只用列表的插件不需要这个依赖。
-  webf_cupertino_ui: ^0.4.1
-  # `<flutter-cupertino-icon>` 的字体。**必须在这里显式声明** ——
-  # `webf_cupertino_ui` 自己没有依赖它（它的 pubspec 只有 flutter/webf/logger/
-  # collection），这是那个包的打包遗漏。因果链：它的
-  # `cupertino_icons_map_generated.dart` 取值全是 `CupertinoIcons.xxx`，而那些常量是
-  # `IconData(0xf43c, fontFamily: 'CupertinoIcons', fontPackage: 'cupertino_icons')`
-  # —— 字体文件由 `cupertino_icons` 包的 pubspec 声明，不列进依赖，
-  # `CupertinoIcons.ttf` 就不进 assets。
-  # 症状**不是「图标不显示」而是画成一个 `?` 方框**：那些码点在私用区，缺字体时由
-  # 系统兜底字体（macOS 是 LastResort）渲染成「未知字符」占位符，不报错、不打日志。
-  # 别把它误判成「图标名写错」—— `icon.dart` 对查不到的 type 返回
-  # `SizedBox.shrink()`，名字写错是**看不见**，不是问号（songloft-org/songloft#341 实测）。
-  cupertino_icons: ^1.0.8
   web: ^1.1.1
   json_annotation: ^4.9.0
   # 系统音量控制
@@ -158,18 +131,6 @@ flutter:
   assets:
     - assets/icons/app_icon.png
     - windows/runner/resources/app_icon.ico
-    # 插件页图标字体（songloft-org/songloft#341）。刻意声明为 asset 而非
-    # fonts: 条目 —— 它只在 WebF 渲染引擎下由 PluginRenderFonts 用 FontLoader
-    # 按需注册，不进 App 自身的字体表，避免影响应用排版。
-    - fonts/material-symbols-outlined.ttf
-    # 许可文本（songloft-org/songloft#341）。GPLv3 §4/§5 要求「随附」许可全文，
-    # 而我们的二进制链接了 GPL-3.0-only 的 WebF，故整体按 GPL-3.0 分发。
-    # 声明为 Flutter asset 是唯一能一次覆盖全部平台、且**完全不碰签名流程**的做法：
-    # asset 在 `flutter build` 阶段就进了 flutter_assets/，签名（APK/IPA/DMG/MSIX）
-    # 发生在那之后，所以不存在破坏签名的风险。设置 → 关于 → 开源许可页读它们，
-    # 因此离线设备上也能看到完整许可全文，不依赖外链。
-    - LICENSES/GPL-3.0.txt
-    - NOTICE
     - assets/legal/TERMS.md
     - assets/legal/TERMS.en.md
   fonts:

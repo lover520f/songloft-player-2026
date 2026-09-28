@@ -71,10 +71,14 @@ class MiniPlayer extends ConsumerWidget {
               label: AppLocalizations.of(context).playerExpandPlayer,
               button: true,
               child: InkWell(
-                onTap: onTap ?? () {
-                  debugPrint('[Player] MiniPlayer tapped, opening full player');
-                  openFullPlayer(context);
-                },
+                onTap:
+                    onTap ??
+                    () {
+                      debugPrint(
+                        '[Player] MiniPlayer tapped, opening full player',
+                      );
+                      openFullPlayer(context);
+                    },
                 child: SizedBox(
                   height: 64,
                   child: Padding(
@@ -97,15 +101,32 @@ class MiniPlayer extends ConsumerWidget {
                               const SizedBox(height: 2),
                               Row(
                                 children: [
-                                  if (ref.watch(dlnaStateProvider.select((s) => s.isCasting)))
+                                  if (ref.watch(
+                                    dlnaStateProvider.select(
+                                      (s) => s.isCasting,
+                                    ),
+                                  ))
                                     Padding(
                                       padding: const EdgeInsets.only(right: 4),
-                                      child: Icon(Icons.cast_connected, size: 12, color: theme.colorScheme.primary),
+                                      child: Icon(
+                                        Icons.cast_connected,
+                                        size: 12,
+                                        color: theme.colorScheme.primary,
+                                      ),
                                     ),
                                   Expanded(
                                     child: Text(
-                                      song.artist ?? AppLocalizations.of(context).playerUnknownArtist,
-                                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                                      song.artist ??
+                                          AppLocalizations.of(
+                                            context,
+                                          ).playerUnknownArtist,
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color:
+                                                theme
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -195,22 +216,31 @@ class MiniPlayer extends ConsumerWidget {
                             color: theme.colorScheme.surfaceContainerHighest,
                           ),
                           clipBehavior: Clip.antiAlias,
-                          child: song.coverUrl != null && (song.coverUrl as String).isNotEmpty
-                              ? Image.network(
-                                  UrlHelper.buildCoverUrl(song.coverUrl, width: 108),
-                                  fit: BoxFit.cover,
-                                  cacheWidth: 108,
-                                  errorBuilder: (_, _, _) => Icon(
+                          child:
+                              song.coverUrl != null &&
+                                      (song.coverUrl as String).isNotEmpty
+                                  ? Image.network(
+                                    UrlHelper.buildCoverUrl(
+                                      song.coverUrl,
+                                      width: 108,
+                                    ),
+                                    fit: BoxFit.cover,
+                                    cacheWidth: 108,
+                                    errorBuilder:
+                                        (_, _, _) => Icon(
+                                          Icons.music_note_rounded,
+                                          size: 18,
+                                          color:
+                                              theme
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                        ),
+                                  )
+                                  : Icon(
                                     Icons.music_note_rounded,
                                     size: 18,
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
-                                )
-                              : Icon(
-                                  Icons.music_note_rounded,
-                                  size: 18,
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
                         ),
                         const SizedBox(width: 12),
                         // 标题 + 艺术家

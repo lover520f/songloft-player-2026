@@ -259,7 +259,9 @@ class _UpgradeDialogState extends ConsumerState<UpgradeDialog> {
                           Expanded(
                             child: Text(
                               _error!,
-                              style: TextStyle(color: colorScheme.onErrorContainer),
+                              style: TextStyle(
+                                color: colorScheme.onErrorContainer,
+                              ),
                             ),
                           ),
                         ],

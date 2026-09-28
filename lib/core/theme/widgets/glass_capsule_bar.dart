@@ -22,8 +22,8 @@ class GlassCapsuleBar extends StatelessWidget {
 
     final fill = ext?.glassFill ?? theme.colorScheme.surfaceContainer;
     final border = ext?.glassBorder ?? theme.colorScheme.outlineVariant;
-    final selectedFill = ext?.glassGlowFaint ??
-        theme.colorScheme.primaryContainer.withAlpha(77);
+    final selectedFill =
+        ext?.glassGlowFaint ?? theme.colorScheme.primaryContainer.withAlpha(77);
     final glow = ext?.glassGlow ?? theme.colorScheme.primary;
 
     return Padding(
@@ -100,10 +100,7 @@ class _CapsuleItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconTheme(
-              data: IconThemeData(color: color, size: 22),
-              child: icon,
-            ),
+            IconTheme(data: IconThemeData(color: color, size: 22), child: icon),
             const SizedBox(height: 2),
             Text(
               label,

@@ -62,8 +62,8 @@ class _PluginWebViewPageState extends ConsumerState<PluginWebViewPage> {
 
     // 渲染引擎由插件自己的 plugin.json 声明（songloft-org/songloft#341）。本页只
     // 拿到拼好的 URL（路由参数就是 URL），故先从 URL 反解 entryPath。
-    // null = 引擎还没确定 → 只显示 loading，**不挂渲染面**：先按默认 WebView 渲染
-    // 再切 WebF 会让整页加载两次。理由见 provider 注释。
+    // null = 引擎还没确定 → 只显示 loading，**不挂渲染面**：先渲染再等列表会让
+    // 整页加载两次。理由见 provider 注释。
     final entryPath = pluginEntryPathFromUrl(widget.pluginUrl);
     final engine =
         entryPath == null

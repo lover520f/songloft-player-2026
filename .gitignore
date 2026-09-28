@@ -55,8 +55,6 @@ pubspec.lock
 /ios/Songloft.xcframework
 /android/app/libs/*.aar
 
-# WebF 验证容器的截图与日志产物（songloft-org/songloft#341）
-/scripts/webf-verify/out/
 
 # Xcode / Swift Package Manager 本地状态
 # xcshareddata/swiftpm/ 未追踪但 Xcode 会自动创建。

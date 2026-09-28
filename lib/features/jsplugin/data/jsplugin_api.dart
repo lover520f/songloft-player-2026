@@ -21,7 +21,7 @@ class JSPlugin {
   final String filePath;
   final String status; // 'active', 'inactive', 'error'
 
-  /// 插件 `plugin.json` 声明的渲染引擎（`'webview'` / `'webf'`）。
+  /// 插件 `plugin.json` 声明的渲染引擎（`'webview'`）。
   ///
   /// 老服务端不返回该字段、插件不声明时为 null / 空串，一律按 `webview` 处理
   /// （解析走 `PluginRenderEngine.fromManifestValue`）。原样保留字符串而不在

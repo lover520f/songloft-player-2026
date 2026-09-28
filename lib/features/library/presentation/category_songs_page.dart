@@ -412,9 +412,7 @@ class _CategorySongsPageState extends ConsumerState<CategorySongsPage>
                 ),
               ),
             ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: context.navScrollInset),
-          ),
+          SliverToBoxAdapter(child: SizedBox(height: context.navScrollInset)),
         ];
       },
       loading:

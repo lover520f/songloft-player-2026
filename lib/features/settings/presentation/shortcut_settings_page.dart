@@ -38,7 +38,12 @@ class ShortcutSettingsPage extends ConsumerWidget {
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.fromLTRB(AppSpacing.md, AppSpacing.md, AppSpacing.md, context.navScrollInset),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
+          context.navScrollInset,
+        ),
         children: [
           SectionCard(
             title: l10n.settingsShortcutsPageTitle,
