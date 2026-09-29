@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_dimensions.dart';
+import '../../../../core/theme/app_theme.dart';
+
 /// 把宿主真实的 [ColorScheme] 序列化成插件页能吃的色板，随 `songloft-theme`
 /// 消息一起下推（songloft-org/songloft#341）。
 ///
@@ -54,10 +57,45 @@ Map<String, String> pluginColorSchemeMap(ColorScheme cs) {
   };
 }
 
+/// 把主题包中会影响插件布局的视觉参数序列化到 `songloft-theme.appearance`。
+///
+/// 插件不能从 [ColorScheme] 推断 `navigationStyle`：标准与胶囊主题可以使用完全
+/// 相同的颜色。由宿主显式下推，才能让插件迷你播放器与主程序保持一致。
+Map<String, Object> pluginThemeAppearanceMap(ThemeData theme) {
+  final ext = theme.extension<SongloftThemeExtension>();
+  final navigationStyle =
+      ext?.navigationStyle == 'capsule' ? 'capsule' : 'standard';
+  final playerGradient = ext?.playerGradientColors;
+  return <String, Object>{
+    'navigationStyle': navigationStyle,
+    'cardRadius': ext?.cardRadius ?? AppRadius.md,
+    'controlRadius': ext?.controlRadius ?? AppRadius.md,
+    'navigationRadius': ext?.navigationRadius ?? AppRadius.md,
+    if (playerGradient != null)
+      'playerGradient': playerGradient.map(_hex).toList(growable: false),
+    if (ext != null) ...<String, String>{
+      'glassFill': _rgba(ext.glassFill),
+      'glassBorder': _rgba(ext.glassBorder),
+    },
+  };
+}
+
 /// `#RRGGBB`。刻意丢掉 alpha：CSS 变量要喂给 `<flutter-cupertino-*>` 的属性，
 /// 那边的 `_parseColor` 只认 `#` 开头的字面量（不展开 `var()`，也不接受 rgba）。
 /// ColorScheme 的角色色本来就都是不透明的。
 String _hex(Color c) {
   final rgb = c.toARGB32() & 0xFFFFFF;
   return '#${rgb.toRadixString(16).padLeft(6, '0').toUpperCase()}';
+}
+
+/// `rgba(...)` for CSS-only appearance tokens. Unlike the native color parser,
+/// CSS can consume alpha directly, and the host mini player's glass tokens are
+/// translucent by design.
+String _rgba(Color c) {
+  final argb = c.toARGB32();
+  final r = (argb >> 16) & 0xFF;
+  final g = (argb >> 8) & 0xFF;
+  final b = argb & 0xFF;
+  final a = ((argb >> 24) & 0xFF) / 255;
+  return 'rgba($r, $g, $b, ${a.toStringAsFixed(3)})';
 }

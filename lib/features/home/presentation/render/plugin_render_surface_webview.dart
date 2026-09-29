@@ -64,6 +64,7 @@ class _PluginRenderSurfaceWebViewState
   /// `build()` 里读 `Theme.of(context)` 存下来，`onLoadStop` 那种拿不到 context 的
   /// 回调里复用。
   ColorScheme? _colorScheme;
+  Map<String, Object>? _themeAppearance;
   String? _lastPushedThemeSig;
 
   @override
@@ -83,7 +84,12 @@ class _PluginRenderSurfaceWebViewState
     final cs = _colorScheme;
     final colors =
         cs == null ? '' : ',colors:${jsonEncode(pluginColorSchemeMap(cs))}';
-    final payload = "{type:'songloft-theme',theme:'${widget.theme}'$colors}";
+    final appearance =
+        _themeAppearance == null
+            ? ''
+            : ',appearance:${jsonEncode(_themeAppearance)}';
+    final payload =
+        "{type:'songloft-theme',theme:'${widget.theme}'$colors$appearance}";
     if (payload == _lastPushedThemeSig) return;
     _lastPushedThemeSig = payload;
     _controller?.evaluateJavascript(source: "window.postMessage($payload,'*')");
@@ -139,7 +145,9 @@ class _PluginRenderSurfaceWebViewState
     listenPlayerState();
     // 在 build() 里读是为了建立 Theme 依赖：切亮暗 / 换主题包都会让本 widget
     // 重建并自动重推。去重在 `_syncTheme` 内部做。
-    _colorScheme = Theme.of(context).colorScheme;
+    final themeData = Theme.of(context);
+    _colorScheme = themeData.colorScheme;
+    _themeAppearance = pluginThemeAppearanceMap(themeData);
 
     final tokenScript = _buildTokenInjectionScript();
 

@@ -53,6 +53,7 @@ class _PluginWebViewPageState extends ConsumerState<PluginWebViewPage> {
 
   /// `build()` 里读 `Theme.of(context)` 存下来，iframe 的 `load` 回调里复用。
   ColorScheme? _colorScheme;
+  Map<String, Object>? _themeAppearance;
   String? _lastPushedThemeSig;
 
   // 客户端 SDK 桥接（iframe ↔ 宿主）
@@ -86,6 +87,7 @@ class _PluginWebViewPageState extends ConsumerState<PluginWebViewPage> {
       'type': 'songloft-theme',
       'theme': _lastTheme ?? 'light',
       if (cs != null) 'colors': pluginColorSchemeMap(cs),
+      if (_themeAppearance case final appearance?) 'appearance': appearance,
     };
     final sig = jsonEncode(payload);
     if (sig == _lastPushedThemeSig) return;
@@ -219,7 +221,9 @@ class _PluginWebViewPageState extends ConsumerState<PluginWebViewPage> {
 
     // `_lastTheme` 必须在 iframe factory 跑之前就位 —— URL 的 ?theme= 从它取值。
     _lastTheme = theme;
-    _colorScheme = Theme.of(context).colorScheme;
+    final themeData = Theme.of(context);
+    _colorScheme = themeData.colorScheme;
+    _themeAppearance = pluginThemeAppearanceMap(themeData);
     // 无条件调用，由 `_syncTheme` 内部去重（换主题包时 theme 不变而色板变了）。
     _syncTheme();
 
