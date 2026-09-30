@@ -94,6 +94,7 @@ jobs:
         with:
           name: songloft-web-${{ matrix.mode }}
           path: songloft-web-${{ matrix.mode }}.tar.gz
+          retention-days: 1
 
   build-linux:
     name: Linux (x64)
@@ -177,6 +178,7 @@ jobs:
             songloft-linux-x64.deb
             songloft-linux-x64.rpm
             songloft-linux-x64.AppImage
+          retention-days: 1
 
   build-windows:
     name: Windows (x64)
@@ -231,6 +233,7 @@ jobs:
           path: |
             songloft-windows-x64.zip
             songloft-windows-x64.msix
+          retention-days: 1
 
   build-macos:
     name: macOS (Universal)
@@ -281,6 +284,7 @@ jobs:
           path: |
             songloft-macos.zip
             songloft-macos.dmg
+          retention-days: 1
 
   build-android:
     name: Android (APK)
@@ -424,6 +428,7 @@ jobs:
             apk-output/patch-*.zip
             apk-output/manifest-*.json
             apk-output/version.json
+          retention-days: 1
 
   build-ios:
     name: iOS (No Codesign)
@@ -460,6 +465,7 @@ jobs:
         with:
           name: songloft-ios
           path: songloft-ios-nosign.ipa
+          retention-days: 1
 
   # ============================================================
   # 发布 Release
