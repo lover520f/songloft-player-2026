@@ -755,6 +755,8 @@
       }
     }
   },
+  "homePluginWebViewUnsupported": "Esta plataforma no admite páginas de plugins integradas",
+  "homePluginWebViewUnsupportedHint": "Este sistema no dispone de un motor WebView integrado, así que por ahora las páginas de plugins solo pueden abrirse en el navegador.",
   "homePluginUnknownError": "Error desconocido",
   "homePluginWebOpenInNewTab": "En la web, abre el plugin en una pestaña nueva",
   "authLogin": "Iniciar sesión",

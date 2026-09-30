@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/webview_support.dart';
 import '../../player/domain/player_state.dart';
 import '../../player/presentation/providers/player_provider.dart';
 import 'plugin_host_dispatch.dart';
@@ -37,6 +38,14 @@ mixin PluginHostBridgeMixin<T extends ConsumerStatefulWidget>
       );
 
   Future<Map<String, String>> _getCookiesForOrigin(String origin) async {
+    // Linux 桌面没有 flutter_inappwebview 平台实现，`CookieManager.instance()`
+    // 与 `InAppWebView` 一样会在 null-check 上崩溃（songloft-org/songloft-player#47）。
+    // 先抛明确错误，由 dispatcher 统一转成 `{ok:false, error}` 的 reject。
+    if (!isWebViewPlatformAvailable()) {
+      throw Exception(
+        'getCookies is not available: no WebView implementation on this platform',
+      );
+    }
     final cookieManager = CookieManager.instance();
     final cookies = await cookieManager.getCookies(url: WebUri(origin));
     final result = <String, String>{};

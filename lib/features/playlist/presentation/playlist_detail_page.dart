@@ -20,7 +20,6 @@ import '../../../shared/mixins/song_list_actions.dart';
 import '../../../shared/widgets/draggable_scrollbar_overlay.dart';
 import '../../../shared/widgets/scroll_to_top_fab.dart';
 import '../../../shared/widgets/song_picker_modal.dart';
-import '../../library/presentation/providers/song_tag_provider.dart';
 import '../../library/presentation/providers/songs_provider.dart';
 import '../../library/presentation/song_edit_page.dart';
 import '../../player/domain/playback_context.dart';

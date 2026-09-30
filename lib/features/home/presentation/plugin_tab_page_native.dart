@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/storage/secure_storage.dart';
+import '../../../core/utils/webview_support.dart';
 import '../../settings/presentation/providers/settings_provider.dart';
 import 'plugin_tab_back_registry.dart';
 import 'plugin_theme_utils.dart';
+import 'plugin_unsupported_view.dart';
 import 'render/plugin_render_controller.dart';
 import 'render/plugin_render_engine_provider.dart';
 import 'render/plugin_render_view.dart';
@@ -87,8 +89,12 @@ class _PluginTabPageState extends ConsumerState<PluginTabPage> {
     // PopScope 不会被 go_router 咨询，故改由路由页统一处理。
     return SafeArea(
       bottom: false,
+      // 本平台没有 WebView 平台实现（Linux 桌面）时不挂渲染面，改走降级视图；
+      // 理由同 plugin_webview_page_native（songloft-org/songloft-player#47）。
       child:
-          engine == null
+          !isWebViewPlatformAvailable()
+              ? PluginUnsupportedView(url: _buildPluginUrl(theme))
+              : engine == null
               ? const Center(child: CircularProgressIndicator())
               : PluginRenderView(
                 url: _buildPluginUrl(theme),

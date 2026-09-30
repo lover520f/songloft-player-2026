@@ -2380,6 +2380,18 @@ abstract class AppLocalizations {
   /// **'页面加载失败: HTTP {status}{detail}'**
   String homePluginLoadFailedHttp(String status, String detail);
 
+  /// No description provided for @homePluginWebViewUnsupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前平台暂不支持应用内插件页'**
+  String get homePluginWebViewUnsupported;
+
+  /// No description provided for @homePluginWebViewUnsupportedHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前系统缺少应用内 WebView 渲染引擎，插件页暂时只能在浏览器中打开。'**
+  String get homePluginWebViewUnsupportedHint;
+
   /// No description provided for @homePluginUnknownError.
   ///
   /// In zh, this message translates to:

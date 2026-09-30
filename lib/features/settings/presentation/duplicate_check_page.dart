@@ -522,7 +522,7 @@ class _DuplicateCheckPageState extends ConsumerState<DuplicateCheckPage> {
                         ? Center(child: Text(l10n.settingsDuplicateNoFailed))
                         : ListView.separated(
                           itemCount: items.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          separatorBuilder: (_, _) => const Divider(height: 1),
                           itemBuilder: (context, index) {
                             final item = items[index];
                             final display =

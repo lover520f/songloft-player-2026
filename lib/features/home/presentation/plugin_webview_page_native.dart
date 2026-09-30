@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/storage/secure_storage.dart';
+import '../../../core/utils/webview_support.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../settings/presentation/providers/settings_provider.dart';
 import 'plugin_theme_utils.dart';
+import 'plugin_unsupported_view.dart';
 import 'render/plugin_render_controller.dart';
 import 'render/plugin_render_engine_provider.dart';
 import 'render/plugin_render_view.dart';
@@ -104,8 +106,13 @@ class _PluginWebViewPageState extends ConsumerState<PluginWebViewPage> {
         ),
         body: SafeArea(
           top: false,
+          // 本平台没有 WebView 平台实现（Linux 桌面）时不挂渲染面：`InAppWebView`
+          // 会在构造期抛 null-check，onLoad* 永不触发，只会剩下一个误导性的
+          // 20s「加载超时」（songloft-org/songloft-player#47）。
           child:
-              engine == null
+              !isWebViewPlatformAvailable()
+                  ? PluginUnsupportedView(url: _buildPluginUrl(theme))
+                  : engine == null
                   ? const Center(child: CircularProgressIndicator())
                   : PluginRenderView(
                     url: _buildPluginUrl(theme),

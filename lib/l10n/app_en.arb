@@ -727,6 +727,8 @@
       }
     }
   },
+  "homePluginWebViewUnsupported": "In-app plugin pages are not supported on this platform",
+  "homePluginWebViewUnsupportedHint": "This system has no in-app WebView engine, so plugin pages can only be opened in your browser for now.",
   "homePluginUnknownError": "Unknown error",
   "homePluginWebOpenInNewTab": "On the web, please open the plugin in a new tab",
   "authLogin": "Log in",

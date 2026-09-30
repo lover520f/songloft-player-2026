@@ -1308,6 +1308,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get homePluginWebViewUnsupported =>
+      'In-app plugin pages are not supported on this platform';
+
+  @override
+  String get homePluginWebViewUnsupportedHint =>
+      'This system has no in-app WebView engine, so plugin pages can only be opened in your browser for now.';
+
+  @override
   String get homePluginUnknownError => 'Unknown error';
 
   @override

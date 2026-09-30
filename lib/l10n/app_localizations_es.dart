@@ -1324,6 +1324,14 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get homePluginWebViewUnsupported =>
+      'Esta plataforma no admite páginas de plugins integradas';
+
+  @override
+  String get homePluginWebViewUnsupportedHint =>
+      'Este sistema no dispone de un motor WebView integrado, así que por ahora las páginas de plugins solo pueden abrirse en el navegador.';
+
+  @override
   String get homePluginUnknownError => 'Error desconocido';
 
   @override

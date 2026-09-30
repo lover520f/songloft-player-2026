@@ -1275,6 +1275,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get homePluginWebViewUnsupported => '当前平台暂不支持应用内插件页';
+
+  @override
+  String get homePluginWebViewUnsupportedHint =>
+      '当前系统缺少应用内 WebView 渲染引擎，插件页暂时只能在浏览器中打开。';
+
+  @override
   String get homePluginUnknownError => '未知错误';
 
   @override
