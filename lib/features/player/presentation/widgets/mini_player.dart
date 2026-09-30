@@ -14,6 +14,7 @@ import '../providers/mini_player_controls_provider.dart';
 import '../providers/player_provider.dart';
 import '../../../dlna/presentation/providers/dlna_provider.dart';
 import '../utils/full_player_route.dart';
+import 'capsule_mini_player.dart';
 import 'play_controls.dart';
 import 'popup_controls.dart';
 import 'progress_bar.dart';
@@ -45,8 +46,9 @@ class MiniPlayer extends ConsumerWidget {
     final ext = theme.extension<SongloftThemeExtension>();
     final useCapsule = ext?.navigationStyle == 'capsule';
 
+    // 胶囊模式：与平板 / 桌面共用同一条浮起胶囊（手机档 = 无真模糊 + 精简控制区）
     if (useCapsule) {
-      return _buildCapsule(context, ref, theme, ext, song, state, notifier);
+      return CapsuleMiniPlayer.compact(onTap: onTap);
     }
 
     // Standard mode: 2px progress + 64px body = 66px
@@ -145,160 +147,6 @@ class MiniPlayer extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Lynx 风格胶囊迷你播放器：pill 全圆角 + 3px 进度条 + 48px 行 + 圆形播放按钮
-  Widget _buildCapsule(
-    BuildContext context,
-    WidgetRef ref,
-    ThemeData theme,
-    SongloftThemeExtension? ext,
-    dynamic song,
-    PlayerState state,
-    PlayerNotifier notifier,
-  ) {
-    const capsuleHeight = 51.0; // 3px progress + 48px row
-    const rowHeight = 48.0;
-    final radius = BorderRadius.circular(capsuleHeight / 2);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-      child: Container(
-        height: capsuleHeight,
-        decoration: BoxDecoration(
-          color: ext?.glassFill ?? theme.colorScheme.surfaceContainer,
-          borderRadius: radius,
-          border: Border.all(
-            color: ext?.glassBorder ?? theme.colorScheme.outlineVariant,
-            width: 0.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(20),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: radius,
-            onTap: onTap ?? () => openFullPlayer(context),
-            child: Column(
-              children: [
-                // 3px 进度条
-                SizedBox(
-                  height: 3,
-                  child: PlayerProgressBar(
-                    position: state.currentTime,
-                    duration: state.duration,
-                    onSeek: notifier.seek,
-                    mini: true,
-                  ),
-                ),
-                // 48px 内容行
-                SizedBox(
-                  height: rowHeight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      children: [
-                        // 36px 封面
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: theme.colorScheme.surfaceContainerHighest,
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child:
-                              song.coverUrl != null &&
-                                      (song.coverUrl as String).isNotEmpty
-                                  ? Image.network(
-                                    UrlHelper.buildCoverUrl(
-                                      song.coverUrl,
-                                      width: 108,
-                                    ),
-                                    fit: BoxFit.cover,
-                                    cacheWidth: 108,
-                                    errorBuilder:
-                                        (_, _, _) => Icon(
-                                          Icons.music_note_rounded,
-                                          size: 18,
-                                          color:
-                                              theme
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
-                                        ),
-                                  )
-                                  : Icon(
-                                    Icons.music_note_rounded,
-                                    size: 18,
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                        ),
-                        const SizedBox(width: 12),
-                        // 标题 + 艺术家
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                song.title as String,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              if (song.artist != null) ...[
-                                const SizedBox(height: 1),
-                                Text(
-                                  song.artist as String,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        // 圆形播放按钮（primary 填充）
-                        GestureDetector(
-                          onTap: notifier.togglePlay,
-                          child: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: theme.colorScheme.primary,
-                            ),
-                            child: Icon(
-                              state.isPlaying
-                                  ? Icons.pause_rounded
-                                  : Icons.play_arrow_rounded,
-                              size: 20,
-                              color: theme.colorScheme.onPrimary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

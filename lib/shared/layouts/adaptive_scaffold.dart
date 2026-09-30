@@ -260,7 +260,23 @@ class AdaptiveScaffold extends StatelessWidget {
   }
 
   /// Tablet: NavigationRail 布局
+  ///
+  /// 胶囊模式下底部播放器是**浮起**的胶囊条，由 [_overlayBottomPlayer] 叠在内容
+  /// 之上、横跨「内容列 + 播放列表抽屉」整宽；标准模式仍是占布局高度的底栏。
   Widget _buildTabletLayout(BuildContext context) {
+    final useCapsule =
+        Theme.of(
+          context,
+        ).extension<SongloftThemeExtension>()?.navigationStyle ==
+        'capsule';
+
+    final content = Row(
+      children: [
+        Expanded(child: body),
+        if (playlistDrawer != null) playlistDrawer!,
+      ],
+    );
+
     return Scaffold(
       body: Row(
         children: [
@@ -279,22 +295,35 @@ class AdaptiveScaffold extends StatelessWidget {
           ),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(child: body),
-                      if (playlistDrawer != null) playlistDrawer!,
-                    ],
-                  ),
-                ),
-                if (bottomPlayer != null) bottomPlayer!,
-              ],
-            ),
+            child:
+                useCapsule
+                    ? _overlayBottomPlayer(content, bottomPlayer)
+                    : Column(
+                      children: [
+                        Expanded(child: content),
+                        if (bottomPlayer != null) bottomPlayer!,
+                      ],
+                    ),
           ),
         ],
       ),
+    );
+  }
+
+  /// 把底部播放器浮在内容之上（胶囊模式）。
+  ///
+  /// 浮起后播放器不占布局高度，因此必须用 `Stack` 承载：`Column` 本身没有
+  /// RenderObject，`BackdropFilter` 落在它下面会命中「无 backdrop 可采」的优化分支
+  /// 而静默失效，毛玻璃就白做了。内容则按 `ResponsiveContext.navScrollInset`
+  /// （胶囊档 84）预留底部滚动间距。
+  static Widget _overlayBottomPlayer(Widget content, Widget? bottomPlayer) {
+    if (bottomPlayer == null) return content;
+
+    return Stack(
+      children: [
+        Positioned.fill(child: content),
+        Positioned(left: 0, right: 0, bottom: 0, child: bottomPlayer),
+      ],
     );
   }
 
@@ -307,16 +336,16 @@ class AdaptiveScaffold extends StatelessWidget {
     final ext = theme.extension<SongloftThemeExtension>();
     final useCapsule = ext?.navigationStyle == 'capsule';
 
+    final content = Row(
+      children: [
+        Expanded(child: body),
+        if (playlistDrawer != null) playlistDrawer!,
+      ],
+    );
+
     final bodyColumn = Column(
       children: [
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: body),
-              if (playlistDrawer != null) playlistDrawer!,
-            ],
-          ),
-        ),
+        Expanded(child: content),
         if (bottomPlayer != null) bottomPlayer!,
       ],
     );
@@ -329,14 +358,15 @@ class AdaptiveScaffold extends StatelessWidget {
     );
 
     if (useCapsule) {
-      // 玻璃模式：Stack + BackdropFilter 毛玻璃侧边栏
+      // 玻璃模式：Stack + BackdropFilter 毛玻璃侧边栏；底部播放器是浮起胶囊条，
+      // 横跨「内容列 + 播放列表抽屉」但不覆盖左侧 240px 毛玻璃侧栏。
       return Scaffold(
         body: Stack(
           children: [
             Row(
               children: [
                 const SizedBox(width: _desktopSidebarWidth),
-                Expanded(child: bodyColumn),
+                Expanded(child: _overlayBottomPlayer(content, bottomPlayer)),
               ],
             ),
             Positioned(

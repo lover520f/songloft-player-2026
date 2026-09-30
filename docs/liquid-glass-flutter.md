@@ -62,7 +62,8 @@ ClipRRect(
 
 | 文件 | 表面 | 备注 |
 |---|---|---|
-| `lib/features/player/presentation/widgets/mini_player.dart`（或 mobile_player 里的 mini） | mini-player | 现有 sigma:70 是封面背景模糊，这里是胶囊本身玻璃 |
+| `lib/features/player/presentation/widgets/capsule_mini_player.dart` | **大屏胶囊迷你播放器**（capsule 主题下 tablet / desktop 的浮起胶囊条） | `GlassSurface` **sigma 20**（`AppCapsulePlayer.blurSigma`）；手机档（`CapsuleMiniPlayer.compact`）共用同一骨架但**不做真模糊**，只保留半透填充 + 内高光 |
+| `lib/features/player/presentation/widgets/mini_player.dart` | mini-player（standard 模式的底栏） | 现有 sigma:70 是封面背景模糊，这里是胶囊本身玻璃；capsule 模式下它直接转发给 `CapsuleMiniPlayer.compact` |
 | 导航栏（`NavigationBar`/`BottomNavigationBar` 所在） | 底部 nav 胶囊 | 选中 pill 用 `glassGlowFaint` |
 | 各 Dialog：`playlist_form_dialog.dart`、`playlist_edit_dialog.dart`、`upgrade_dialog.dart`、`frontend_upgrade_dialog.dart`、`github_proxy_dialog.dart` | 对话框卡片 | |
 | 各 Sheet：`device_sheet.dart`、`cache_manager.dart`、`shortcut_recorder.dart` 等 | 底部 sheet | |

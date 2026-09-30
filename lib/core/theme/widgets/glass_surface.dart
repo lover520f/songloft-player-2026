@@ -66,7 +66,13 @@ class GlassSurface extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 stops: const [0.0, 0.3],
-                colors: [highlight, Colors.transparent],
+                // 终点必须是「同色透明」而不是 `Colors.transparent`：
+                // `Colors.transparent` 是透明**黑**，而渐变色是按未预乘的 RGBA
+                // 逐通道插值的，白 60% → 透明黑会在中途插出灰 30% —— 落在半透玻璃
+                // 上就是顶边一条 30% 高度的暗带（比页面背景还暗 30 级），看着就像
+                // 玻璃自带一圈很重的阴影。用 `highlight.withValues(alpha: 0)` 则全程
+                // 只有一个亮度递减的白色，只会提亮、不会压暗。
+                colors: [highlight, highlight.withValues(alpha: 0)],
               ),
             ),
             child: Padding(padding: padding ?? EdgeInsets.zero, child: child),

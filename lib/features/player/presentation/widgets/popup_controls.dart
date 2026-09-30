@@ -278,6 +278,142 @@ class _PlayModeOverlayPanel extends StatelessWidget {
   }
 }
 
+/// 播放速度档位（浮层与底部抽屉共用，避免两处档位漂移）
+const List<double> kPlayerSpeedOptions = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+
+/// 档位标签：1.0 → 「正常」，其余 → 「0.75x / 1.25x / 1.5x / 2.0x」。
+///
+/// 沿用 `_SpeedOverlayPanel` 原本的 `'${speed}x'` 格式（不做尾零裁剪），
+/// 这样抽公共组件不会顺带改掉标准模式浮层的既有文案。
+String speedOptionLabel(BuildContext context, double speed) {
+  if (speed == 1.0) return AppLocalizations.of(context).playerSpeedNormal;
+  return '${speed}x';
+}
+
+/// 倍速档位列表（浮层 / 底部抽屉共用）
+class SpeedOptionsList extends StatelessWidget {
+  final double speed;
+  final ValueChanged<double> onSpeedChanged;
+  final double itemHeight;
+  final double fontSize;
+
+  const SpeedOptionsList({
+    super.key,
+    required this.speed,
+    required this.onSpeedChanged,
+    this.itemHeight = 48,
+    this.fontSize = 14,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final s in kPlayerSpeedOptions)
+          Semantics(
+            button: true,
+            selected: speed == s,
+            child: InkWell(
+              onTap: () => onSpeedChanged(s),
+              child: Container(
+                width: double.infinity,
+                height: itemHeight,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  speedOptionLabel(context, s),
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    color:
+                        speed == s
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface,
+                    fontWeight:
+                        speed == s ? FontWeight.w500 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// 倍速选择底部抽屉。
+///
+/// 「更多」菜单等**无锚点**场景专用：`PopupSpeedControl` 依赖自身按钮的
+/// GlobalKey 定位 OverlayEntry，塞进 `PopupMenuButton.items` 里拿不到锚点，
+/// 抽屉是这一类场景唯一可用的形态（与睡眠定时一致）。
+Future<void> showSpeedSheet(
+  BuildContext context, {
+  required double speed,
+  required ValueChanged<double> onSpeedChanged,
+}) {
+  return showModalBottomSheet<void>(
+    context: context,
+    useSafeArea: true,
+    builder: (sheetContext) {
+      final theme = Theme.of(sheetContext);
+      final l10n = AppLocalizations.of(sheetContext);
+      return Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.onSurfaceVariant.withAlpha(100),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.speed_rounded,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    l10n.playerSpeed,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SpeedOptionsList(
+              speed: speed,
+              onSpeedChanged: (value) {
+                onSpeedChanged(value);
+                Navigator.of(sheetContext).pop();
+              },
+            ),
+            SizedBox(height: MediaQuery.paddingOf(sheetContext).bottom + 8),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 /// 播放速度弹出控制组件
 class PopupSpeedControl extends StatefulWidget {
   final double speed;
@@ -402,8 +538,6 @@ class _SpeedOverlayPanel extends StatelessWidget {
     final screenSize = MediaQuery.sizeOf(context);
     final l10n = AppLocalizations.of(context);
 
-    const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
-
     final itemHeight = context.responsive<double>(
       mobile: 44,
       tablet: 48,
@@ -420,7 +554,7 @@ class _SpeedOverlayPanel extends StatelessWidget {
       desktop: 14,
     );
 
-    final panelHeight = speeds.length * itemHeight + 16;
+    final panelHeight = kPlayerSpeedOptions.length * itemHeight + 16;
 
     double left = anchorPosition.dx + anchorSize.width / 2 - panelWidth / 2;
     if (left < 16) left = 16;
@@ -458,41 +592,11 @@ class _SpeedOverlayPanel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: FocusScope(
                 autofocus: true,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (final s in speeds)
-                      Semantics(
-                        button: true,
-                        selected: speed == s,
-                        child: InkWell(
-                          onTap: () => onSpeedChanged(s),
-                          child: Container(
-                            width: double.infinity,
-                            height: itemHeight,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              s == 1.0 ? l10n.playerSpeedNormal : '${s}x',
-                              style: TextStyle(
-                                fontSize: fontSize,
-                                color:
-                                    speed == s
-                                        ? theme.colorScheme.primary
-                                        : theme.colorScheme.onSurface,
-                                fontWeight:
-                                    speed == s
-                                        ? FontWeight.w500
-                                        : FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+                child: SpeedOptionsList(
+                  speed: speed,
+                  onSpeedChanged: onSpeedChanged,
+                  itemHeight: itemHeight,
+                  fontSize: fontSize,
                 ),
               ),
             ),

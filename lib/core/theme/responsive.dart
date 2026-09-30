@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_dimensions.dart';
 import 'app_theme.dart';
 
 enum ScreenType { mobile, tablet, desktop, widescreen }
@@ -76,12 +77,21 @@ extension ResponsiveContext on BuildContext {
   }
 
   /// 底部滚动间距（等价 Lynx --nav-inset）。
-  /// capsule 模式 extendBody: true → padding.bottom 已含胶囊高度，加 16px 呼吸空间；
-  /// standard 模式 extendBody: false → 手动加 80px 腾出导航栏空间。
+  ///
+  /// - 手机 capsule：`extendBody: true`，胶囊条仍占 bottomNavigationBar 槽位，
+  ///   `padding.bottom` 已含其高度，只补 16px 呼吸空间。
+  /// - 大屏 capsule（tablet / desktop）：胶囊条是**浮起覆盖层**（见
+  ///   `AdaptiveScaffold._overlayBottomPlayer`），不占布局高度，必须自己预留整条
+  ///   高度 [AppCapsulePlayer.desktopOverlayInset]（64 + 12 + 8 = 84）。
+  /// - standard：`extendBody: false` → 手动加 80px 腾出导航栏空间。
   double get navScrollInset {
     final ext = Theme.of(this).extension<SongloftThemeExtension>();
     final bottom = MediaQuery.paddingOf(this).bottom;
-    if (ext?.navigationStyle == 'capsule') return bottom + 16;
+    if (ext?.navigationStyle == 'capsule') {
+      final wide =
+          screenType == ScreenType.tablet || screenType == ScreenType.desktop;
+      return bottom + (wide ? AppCapsulePlayer.desktopOverlayInset : 16);
+    }
     return bottom + 80;
   }
 

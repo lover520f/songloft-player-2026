@@ -16,6 +16,7 @@ import '../utils/player_song_actions.dart';
 import 'play_controls.dart';
 import 'progress_bar.dart';
 import 'audio_track_control.dart';
+import 'capsule_mini_player.dart';
 import 'equalizer_panel.dart';
 import 'popup_controls.dart';
 import 'volume_control.dart';
@@ -34,19 +35,17 @@ class DesktopPlayer extends ConsumerWidget {
     final ext = theme.extension<SongloftThemeExtension>();
     final useCapsule = ext?.navigationStyle == 'capsule';
 
+    // 胶囊模式：浮起玻璃胶囊条，由 CapsuleMiniPlayer 统一渲染。
+    // 提前返回，省掉下面整棵 90px 底栏的构建（含三个 Expanded 与封面解码）。
+    if (useCapsule) return const CapsuleMiniPlayer();
+
     final bar = Container(
       height: 90,
       decoration: BoxDecoration(
-        color: useCapsule ? Colors.transparent : theme.colorScheme.surface,
-        border:
-            useCapsule
-                ? null
-                : Border(
-                  top: BorderSide(
-                    color: theme.colorScheme.outlineVariant,
-                    width: 1,
-                  ),
-                ),
+        color: theme.colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
+        ),
       ),
       child: Column(
         children: [
@@ -83,30 +82,8 @@ class DesktopPlayer extends ConsumerWidget {
       ),
     );
 
-    if (!useCapsule) return bar;
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: ext?.glassFill ?? theme.colorScheme.surfaceContainer,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: ext?.glassBorder ?? theme.colorScheme.outlineVariant,
-            width: 0.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(15),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: bar,
-      ),
-    );
+    // 标准模式：90px 底栏（含 border-top）
+    return bar;
   }
 
   Widget _buildSongInfo(BuildContext context, PlayerState state) {
